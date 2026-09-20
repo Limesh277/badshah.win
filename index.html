@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Badshah.win - Advanced Gaming Platform</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: #0b0f19; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 420px; background: #131a2a; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid #ff2a85; }
+        
+        .header { background: linear-gradient(135deg, #ff2a85, #7928ca); padding: 20px; text-align: center; }
+        .header h1 { font-size: 24px; color: #fff; letter-spacing: 1px; }
+        .wallet-card { background: rgba(0,0,0,0.3); margin: 15px; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.1); }
+        .balance { font-size: 20px; font-weight: bold; color: #00ffcc; }
+        
+        .nav-tabs { display: flex; background: #0b0f19; border-bottom: 1px solid #222; }
+        .tab-btn { flex: 1; padding: 10px; text-align: center; background: none; border: none; color: #888; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .tab-btn.active { color: #ff2a85; border-bottom: 2px solid #ff2a85; }
+
+        .section { display: none; padding: 20px; max-height: 480px; overflow-y: auto; }
+        .section.active { display: block; }
+
+        .game-box, .panel-box { background: #1a233a; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .timer { font-size: 22px; color: #ffcc00; font-weight: bold; margin: 10px 0; text-align: center; }
+        .color-btns { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
+        .c-btn { flex: 1; padding: 10px; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; color: #fff; }
+        .btn-green { background: #00cc66; }
+        .btn-violet { background: #9933ff; }
+        .btn-red { background: #ff3333; }
+
+        input { width: 100%; padding: 10px; margin: 8px 0; background: #0b0f19; border: 1px solid #444; color: #fff; border-radius: 6px; font-size: 14px; }
+        .submit-btn { width: 100%; padding: 10px; background: #ff2a85; border: none; color: #fff; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 5px; }
+        .info-text { font-size: 12px; color: #aaa; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <div class="header">
+            <h1>Badshah<span>.win</span></h1>
+        </div>
+
+        <div class="wallet-card">
+            <div>
+                <p class="info-text">वर्चुअल बैलेंस</p>
+                <div class="balance">₹<span id="wallet-balance">5000.00</span></div>
+            </div>
+            <button class="submit-btn" style="width: auto; padding: 8px 12px;" onclick="switchTab(1)">डिपॉजिट</button>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab(0)">गेम</button>
+            <button class="tab-btn" onclick="switchTab(1)">डिपॉजिट</button>
+            <button class="tab-btn" onclick="switchTab(2)">विड्रॉ</button>
+            <button class="tab-btn" onclick="switchTab(3)">बैंक/प्रोफाइल</button>
+        </div>
+
+        <!-- TAB 0: GAME -->
+        <div id="tab-game" class="section active">
+            <div class="game-box">
+                <h3>कलर प्रेडिक्शन</h3>
+                <div class="timer" id="timer">00:30</div>
+                <div class="color-btns">
+                    <button class="c-btn btn-green" onclick="placeBet('Green')">हरा</button>
+                    <button class="c-btn btn-violet" onclick="placeBet('Violet')">बैंगनी</button>
+                    <button class="c-btn btn-red" onclick="placeBet('Red')">लाल</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: DEPOSIT (QR & UTR) -->
+        <div id="tab-deposit" class="section">
+            <div class="panel-box" style="text-align: center;">
+                <h3>फंड डिपॉजिट करें</h3>
+                <p class="info-text">अपने QR कोड से स्कैन करके भुगतान करें</p>
+                <div style="background:#fff; color:#000; padding:20px; font-weight:bold; border-radius:8px; margin:10px 0;">[ आपका UPI QR Code ]</div>
+                <p style="color:#00ffcc; font-size:13px;">UPI: milan@upi</p>
+                <input type="number" id="dep-amt" placeholder="रुपये डालें (जैसे 500)">
+                <input type="text" id="utr-no" placeholder="12 अंकों का UTR / Transaction ID">
+                <button class="submit-btn" onclick="submitDeposit()">डिपॉजिट अनुरोध भेजें</button>
+            </div>
+        </div>
+
+        <!-- TAB 2: WITHDRAWAL (With 3% Tax) -->
+        <div id="tab-withdraw" class="section">
+            <div class="panel-box">
+                <h3>विड्रॉवल (निकासी)</h3>
+                <p class="info-text">3% प्रोसेसिंग टैक्स काटने के बाद राशि आपके बैंक में जाएगी।</p>
+                <input type="number" id="withdraw-amt" placeholder="विड्रॉ अमाउंट दर्ज करें (जैसे 5000)">
+                <button class="submit-btn" onclick="processWithdrawal()">विड्रॉ करें</button>
+            </div>
+        </div>
+
+        <!-- TAB 3: BANK BINDING & OTP -->
+        <div id="tab-bank" class="section">
+            <div class="panel-box">
+                <h3>बैंक अकाउंट / UPI जोड़ें</h3>
+                <p class="info-text">खाता सुरक्षित करने के लिए OTP आवश्यक है</p>
+                <input type="text" id="bank-acc" placeholder="बैंक खाता संख्या / UPI ID">
+                <input type="text" id="ifsc-code" placeholder="IFSC कोड">
+                <button class="submit-btn" onclick="sendOtp()">OTP भेजें</button>
+                
+                <div id="otp-section" style="margin-top: 10px; display:none;">
+                    <input type="text" id="otp-input" placeholder="4 अंकों का OTP दर्ज करें (डिफ़ॉल्ट: 1234)">
+                    <button class="submit-btn" style="background:#00cc66;" onclick="verifyAndSaveBank()">खाता लिंक करें</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let balance = 5000.00;
+        let isBankLinked = false;
+
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.section');
+            const btns = document.querySelectorAll('.tab-btn');
+            tabs.forEach(t => t.classList.remove('active'));
+            btns.forEach(b => b.classList.remove('active'));
+            tabs[index].classList.add('active');
+            btns[index].classList.add('active');
+        }
+
+        function submitDeposit() {
+            let amt = parseFloat(document.getElementById('dep-amt').value);
+            let utr = document.getElementById('utr-no').value;
+            if(!amt || !utr) { alert('कृपया सभी जानकारी भरें!'); return; }
+            balance += amt;
+            document.getElementById('wallet-balance').innerText = balance.toFixed(2);
+            alert(`सफलतापूर्वक ₹${amt} आपके वॉलेट में जुड़ गए! (UTR: ${utr})`);
+            document.getElementById('dep-amt').value = '';
+            document.getElementById('utr-no').value = '';
+            switchTab(0);
+        }
+
+        function sendOtp() {
+            let acc = document.getElementById('bank-acc').value;
+            if(!acc) { alert('कृपया बैंक अकाउंट या UPI ID दर्ज करें!'); return; }
+            alert('आपके रजिस्टर्ड मोबाइल नंबर पर OTP भेजा गया है! (सिम्युलेशन OTP: 1234)');
+            document.getElementById('otp-section').style.display = 'block';
+        }
+
+        function verifyAndSaveBank() {
+            let otp = document.getElementById('otp-input').value;
+            if(otp === '1234') {
+                isBankLinked = true;
+                alert('बैंक अकाउंट सफलतापूर्वक वेरीफाई और लिंक हो गया है!');
+                switchTab(2);
+            } else {
+                alert('गलत OTP! कृपया दोबारा प्रयास करें।');
+            }
+        }
+
+        function processWithdrawal() {
+            if(!isBankLinked) {
+                alert('पहले कृपया बैंक अकाउंट या UPI लिंक करें!');
+                switchTab(3);
+                return;
+            }
+            let wAmt = parseFloat(document.getElementById('withdraw-amt').value);
+            if(!wAmt || wAmt <= 0) { alert('सही राशि दर्ज करें!'); return; }
+            if(wAmt > balance) { alert('वॉलेट में पर्याप्त बैलेंस नहीं है!'); return; }
+
+            // 3% Tax Calculation
+            let tax = wAmt * 0.03;
+            let finalAmount = wAmt - tax;
+
+            balance -= wAmt;
+            document.getElementById('wallet-balance').innerText = balance.toFixed(2);
+            alert(`विड्रॉवल सफल!\nRequested: ₹${wAmt}\n3% Tax Deducted: ₹${tax.toFixed(2)}\nTransferred to Bank: ₹${finalAmount.toFixed(2)}`);
+            document.getElementById('withdraw-amt').value = '';
+        }
+
+        function placeBet(color) {
+            if(balance < 100) { alert('पर्याप्त बैलेंस नहीं है!'); return; }
+            balance -= 100;
+            document.getElementById('wallet-balance').innerText = balance.toFixed(2);
+            alert(`₹100 ${color} पर दांव लगाया गया।`);
+        }
+
+        // Timer
+        let t = 30;
+        setInterval(() => {
+            t--; if(t < 0) t = 30;
+            let s = t < 10 ? '0' + t : t;
+            document.getElementById('timer').innerText = `00:${s}`;
+        }, 1000);
+    </script>
+</body>
+</html>
