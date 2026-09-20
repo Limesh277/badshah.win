@@ -2,343 +2,267 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Badshah.win - Official Gaming Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dead Monster</title>
     <style>
-        :root {
-            --bg-color: #0f1225;
-            --card-bg: #1a1f3c;
-            --accent-pink: #e91e63;
-            --accent-gold: #ffd700;
-            --text-main: #ffffff;
-            --text-muted: #8f9b63;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; }
-        .container { max-width: 480px; margin: 0 auto; padding: 15px; }
-        
-        .hidden { display: none !important; }
-
-        #auth-screen {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px;
-        }
-        .auth-card {
-            background: var(--card-bg); width: 100%; padding: 30px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
             text-align: center;
+            touch-action: none;
         }
-        .auth-card h2 { color: var(--accent-gold); margin-bottom: 20px; font-size: 26px; }
-        .auth-input {
-            width: 100%; padding: 12px 15px; margin-bottom: 15px; background: #0f1225; border: 1px solid #333954;
-            border-radius: 8px; color: #fff; font-size: 16px; outline: none;
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            cursor: crosshair;
         }
-        .auth-btn {
-            width: 100%; padding: 12px; background: var(--accent-pink); border: none; border-radius: 8px;
-            color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        canvas {
+            display: block;
+            background: #222;
         }
-        .auth-btn:active { transform: scale(0.98); }
-        .switch-text { margin-top: 15px; font-size: 14px; color: #aaa; cursor: pointer; }
-        .switch-text span { color: var(--accent-gold); text-decoration: underline; }
-
-        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #222; }
-        header h1 { font-size: 20px; color: var(--accent-gold); }
-        .wallet-card { background: linear-gradient(135deg, #e91e63, #7928ca); padding: 20px; border-radius: 16px; margin: 20px 0; text-align: center; }
-        .wallet-card h3 { font-size: 14px; opacity: 0.9; }
-        .wallet-card .balance { font-size: 32px; font-weight: bold; margin: 10px 0; }
-        .wallet-actions { display: flex; gap: 10px; justify-content: center; }
-        .wallet-btn { padding: 8px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .btn-dep { background: #4caf50; color: #fff; }
-        .btn-wit { background: #ff5722; color: #fff; }
-
-        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
-        .game-card { background: var(--card-bg); padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #2a3158; }
-        .game-card h4 { margin-top: 10px; font-size: 16px; }
-
-        .game-screen { background: var(--card-bg); padding: 20px; border-radius: 12px; margin-top: 20px; text-align: center; }
-        .back-btn { background: none; border: 1px solid #555; color: #fff; padding: 5px 15px; border-radius: 5px; cursor: pointer; float: left; margin-bottom: 10px; }
-        
-        #aviator-display { font-size: 40px; font-weight: bold; color: var(--accent-gold); margin: 30px 0; }
-        
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 100; }
-        .modal-content { background: var(--card-bg); width: 90%; max-width: 400px; padding: 25px; border-radius: 16px; text-align: center; position: relative; }
-        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer; }
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: left;
+            pointer-events: none;
+        }
+        #game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #ff4444;
+        }
+        #game-over h1 {
+            color: #ff4444;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        button:hover {
+            background: #cc0000;
+        }
     </style>
 </head>
 <body>
 
-    <!-- 1. AUTH SCREEN -->
-    <div id="auth-screen" class="container">
-        <div class="auth-card" id="login-box">
-            <h2>Badshah.win Login</h2>
-            <input type="text" id="login-phone" class="auth-input" placeholder="Enter Mobile Number">
-            <input type="password" id="login-pass" class="auth-input" placeholder="Enter Password">
-            <button class="auth-btn" onclick="handleLogin()">Login</button>
-            <div class="switch-text" onclick="toggleAuth('register')">Don't have an account? <span>Register</span></div>
+    <div id="game-container">
+        <div id="ui">
+            <div>Score: <span id="score">0</span></div>
+            <div>Health: <span id="health">100</span></div>
+            <div>Ammo: <span id="ammo">10</span>/10 (PC: Press R)</div>
         </div>
-
-        <div class="auth-card hidden" id="register-box">
-            <h2>Create Account</h2>
-            <input type="text" id="reg-phone" class="auth-input" placeholder="Enter Mobile Number">
-            <input type="password" id="reg-pass" class="auth-input" placeholder="Create Password">
-            <button class="auth-btn" onclick="handleRegister()">Register</button>
-            <div class="switch-text" onclick="toggleAuth('login')">Already have an account? <span>Login</span></div>
+        <canvas id="gameCanvas"></canvas>
+        <div id="game-over">
+            <h1>YOU DIED</h1>
+            <p>Your Score: <span id="final-score">0</span></p>
+            <button onclick="restartGame()">Play Again</button>
         </div>
     </div>
 
-    <!-- 2. DASHBOARD SCREEN -->
-    <div id="dashboard-screen" class="container hidden">
-        <header>
-            <h1>BADSHAH.WIN</h1>
-            <button class="back-btn" onclick="handleLogout()" style="float:none;">Logout</button>
-        </header>
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
 
-        <div class="wallet-card">
-            <h3>Total Balance</h3>
-            <div class="balance" id="user-balance">₹0.00</div>
-            <div class="wallet-actions">
-                <button class="wallet-btn btn-dep" onclick="openModal('deposit-modal')">Deposit</button>
-                <button class="wallet-btn btn-wit" onclick="openModal('withdraw-modal')">Withdraw</button>
-            </div>
-        </div>
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        player.x = canvas.width / 2;
+        player.y = canvas.height / 2;
+    }
 
-        <h3>Popular Games</h3>
-        <div class="games-grid">
-            <div class="game-card" onclick="openGame('aviator')">
-                <span style="font-size: 30px;">✈️</span>
-                <h4>Aviator</h4>
-            </div>
-            <div class="game-card" onclick="openGame('slots')">
-                <span style="font-size: 30px;">🎰</span>
-                <h4>Slots Mania</h4>
-            </div>
-            <div class="game-card" onclick="openGame('wingo')">
-                <span style="font-size: 30px;">🔴</span>
-                <h4>Win Go (Color)</h4>
-            </div>
-        </div>
-    </div>
+    window.addEventListener('resize', resizeCanvas);
 
-    <!-- 3. AVIATOR SCREEN -->
-    <div id="aviator-screen" class="container hidden">
-        <button class="back-btn" onclick="closeGame()">← Back</button>
-        <div class="game-screen">
-            <h2>✈️ Aviator Crash Game</h2>
-            <div id="aviator-display">1.00x</div>
-            <input type="number" id="aviator-bet" class="auth-input" placeholder="Bet Amount (₹)" value="100">
-            <button class="auth-btn" id="aviator-btn" onclick="startAviator()">Place Bet</button>
-        </div>
-    </div>
+    let score = 0;
+    let health = 100;
+    let maxAmmo = 10;
+    let ammo = 10;
+    let isGameOver = false;
 
-    <!-- 4. SLOTS SCREEN -->
-    <div id="slots-screen" class="container hidden">
-        <button class="back-btn" onclick="closeGame()">← Back</button>
-        <div class="game-screen">
-            <h2>🎰 Slots Machine</h2>
-            <div id="slots-display" style="font-size: 40px; margin: 30px 0; letter-spacing: 15px;">🍒 🍋 🍊</div>
-            <input type="number" id="slots-bet" class="auth-input" placeholder="Bet Amount (₹)" value="50">
-            <button class="auth-btn" onclick="playSlots()">Spin</button>
-        </div>
-    </div>
+    const player = {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        radius: 20,
+        color: "#3498db"
+    };
 
-    <!-- 5. WIN GO SCREEN -->
-    <div id="wingo-screen" class="container hidden">
-        <button class="back-btn" onclick="closeGame()">← Back</button>
-        <div class="game-screen">
-            <h2>🔴 Win Go Color Prediction</h2>
-            <div id="wingo-timer" style="font-size: 24px; color: var(--accent-gold); margin: 15px 0;">Time Remaining: 30s</div>
-            <input type="number" id="wingo-bet" class="auth-input" placeholder="Amount (₹)" value="10">
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <button class="auth-btn" style="background: #e91e63;" onclick="playWinGo('Red')">Red</button>
-                <button class="auth-btn" style="background: #4caf50;" onclick="playWinGo('Green')">Green</button>
-            </div>
-            <div id="wingo-result" style="font-weight: bold; margin-top: 10px;"></div>
-        </div>
-    </div>
+    let bullets = [];
+    let zombies = [];
+    let spawnTimer = 0;
 
-    <!-- DEPOSIT MODAL -->
-    <div id="deposit-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('deposit-modal')">&times;</span>
-            <h3 style="color: var(--accent-gold); margin-bottom: 15px;">Deposit Funds (Min ₹100)</h3>
-            <div style="background:#fff; padding:10px; display:inline-block; border-radius:8px; margin-bottom:15px;">
-                <img src="qr.png" alt="QR Code" style="width: 150px; height: 150px;" onerror="this.src='https://via.placeholder.com/150?text=QR+Code'">
-            </div>
-            <p style="font-size: 14px; margin-bottom: 15px;">UPI ID: <b>your-upi@okhdfcbank</b></p>
-            <input type="number" id="dep-amount" class="auth-input" placeholder="Enter Amount (₹)">
-            <input type="text" id="dep-utr" class="auth-input" placeholder="Enter 12-digit UTR Number">
-            <button class="auth-btn" onclick="submitDeposit()">Submit Deposit</button>
-        </div>
-    </div>
-
-    <!-- WITHDRAW MODAL -->
-    <div id="withdraw-modal" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('withdraw-modal')">&times;</span>
-            <h3 style="color: var(--accent-gold); margin-bottom: 15px;">Withdraw Funds</h3>
-            <input type="number" id="wit-amount" class="auth-input" placeholder="Withdrawal Amount (₹)">
-            <input type="text" id="wit-upi" class="auth-input" placeholder="Enter your UPI ID">
-            <button class="auth-btn" onclick="submitWithdraw()">Submit Withdrawal</button>
-        </div>
-    </div>
-
-    <script>
-        let balance = 500.00;
-
-        function updateBalanceDisplay() {
-            document.getElementById('user-balance').innerText = '₹' + balance.toFixed(2);
+    function shoot(targetX, targetY) {
+        if (isGameOver) return;
+        if (ammo > 0) {
+            ammo--;
+            updateUI();
+            
+            const angle = Math.atan2(targetY - player.y, targetX - player.x);
+            bullets.push({
+                x: player.x,
+                y: player.y,
+                dx: Math.cos(angle) * 12,
+                dy: Math.sin(angle) * 12,
+                radius: 4
+            });
+        } else {
+            // Mobile Auto-Reload when empty
+            ammo = maxAmmo;
+            updateUI();
         }
+    }
 
-        function toggleAuth(type) {
-            if(type === 'register') {
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('register-box').classList.remove('hidden');
-            } else {
-                document.getElementById('register-box').classList.add('hidden');
-                document.getElementById('login-box').classList.remove('hidden');
+    // Mouse click for PC
+    window.addEventListener("click", (e) => {
+        shoot(e.clientX, e.clientY);
+    });
+
+    // Touch tap for Mobile
+    window.addEventListener("touchstart", (e) => {
+        if (e.touches.length > 0) {
+            shoot(e.touches[0].clientX, e.touches[0].clientY);
+        }
+    });
+
+    // Keyboard Reload for PC ('R')
+    window.addEventListener("keydown", (e) => {
+        if (e.key === 'r' || e.key === 'R') {
+            ammo = maxAmmo;
+            updateUI();
+        }
+    });
+
+    function spawnZombie() {
+        let x, y;
+        if (Math.random() < 0.5) {
+            x = Math.random() < 0.5 ? 0 : canvas.width;
+            y = Math.random() * canvas.height;
+        } else {
+            x = Math.random() * canvas.width;
+            y = Math.random() < 0.5 ? 0 : canvas.height;
+        }
+        zombies.push({
+            x: x,
+            y: y,
+            radius: 18,
+            speed: 1.5 + Math.random() * 1.5,
+            color: "#2ecc71"
+        });
+    }
+
+    function updateUI() {
+        document.getElementById("score").innerText = score;
+        document.getElementById("health").innerText = health;
+        document.getElementById("ammo").innerText = `${ammo}/${maxAmmo}`;
+    }
+
+    function gameLoop() {
+        if (isGameOver) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Player
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+        ctx.fillStyle = player.color;
+        ctx.fill();
+        ctx.closePath();
+
+        // Update Bullets
+        bullets.forEach((bullet, index) => {
+            bullet.x += bullet.dx;
+            bullet.y += bullet.dy;
+
+            ctx.beginPath();
+            ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "#f1c40f";
+            ctx.fill();
+            ctx.closePath();
+
+            if (bullet.x < 0 || bullet.x > canvas.width || bullet.y < 0 || bullet.y > canvas.height) {
+                bullets.splice(index, 1);
             }
+        });
+
+        // Spawn Zombies
+        spawnTimer++;
+        if (spawnTimer % 50 === 0) {
+            spawnZombie();
         }
 
-        function handleLogin() {
-            let phone = document.getElementById('login-phone').value;
-            if(!phone) { alert('Please enter mobile number!'); return; }
-            document.getElementById('auth-screen').classList.add('hidden');
-            document.getElementById('dashboard-screen').classList.remove('hidden');
-            updateBalanceDisplay();
-        }
+        // Update Zombies
+        zombies.forEach((zombie, zIndex) => {
+            const angle = Math.atan2(player.y - zombie.y, player.x - zombie.x);
+            zombie.x += Math.cos(angle) * zombie.speed;
+            zombie.y += Math.sin(angle) * zombie.speed;
 
-        function handleRegister() {
-            let phone = document.getElementById('reg-phone').value;
-            if(!phone) { alert('Please fill correct details!'); return; }
-            alert('Registration successful! Please login.');
-            toggleAuth('login');
-        }
+            ctx.beginPath();
+            ctx.arc(zombie.x, zombie.y, zombie.radius, 0, Math.PI * 2);
+            ctx.fillStyle = zombie.color;
+            ctx.fill();
+            ctx.closePath();
 
-        function handleLogout() {
-            document.getElementById('dashboard-screen').classList.add('hidden');
-            document.getElementById('auth-screen').classList.remove('hidden');
-        }
-
-        function openModal(modalId) { document.getElementById(modalId).classList.remove('hidden'); }
-        function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
-
-        function submitDeposit() {
-            let amt = parseFloat(document.getElementById('dep-amount').value);
-            let utr = document.getElementById('dep-utr').value;
-            if(!amt || amt < 100) { alert('Minimum deposit is ₹100!'); return; }
-            if(!utr || utr.length < 12) { alert('Please enter a valid 12-digit UTR number!'); return; }
-            balance += amt;
-            updateBalanceDisplay();
-            alert('Deposit successful! Amount added to your wallet.');
-            closeModal('deposit-modal');
-        }
-
-        function submitWithdraw() {
-            let amt = parseFloat(document.getElementById('wit-amount').value);
-            if(!amt || amt <= 0) { alert('Please enter a valid amount!'); return; }
-            if(amt > balance) { alert('Insufficient balance!'); return; }
-            balance -= amt;
-            updateBalanceDisplay();
-            alert('Withdrawal request successful! Transferring funds.');
-            closeModal('withdraw-modal');
-        }
-
-        function openGame(gameName) {
-            document.getElementById('dashboard-screen').classList.add('hidden');
-            if(gameName === 'aviator') document.getElementById('aviator-screen').classList.remove('hidden');
-            if(gameName === 'slots') document.getElementById('slots-screen').classList.remove('hidden');
-            if(gameName === 'wingo') document.getElementById('wingo-screen').classList.remove('hidden');
-        }
-
-        function closeGame() {
-            document.getElementById('aviator-screen').classList.add('hidden');
-            document.getElementById('slots-screen').classList.add('hidden');
-            document.getElementById('wingo-screen').classList.add('hidden');
-            document.getElementById('dashboard-screen').classList.remove('hidden');
-        }
-
-        let aviatorInterval;
-        function startAviator() {
-            let bet = parseFloat(document.getElementById('aviator-bet').value);
-            if(bet > balance || bet <= 0) { alert('Low balance or invalid bet!'); return; }
-            balance -= bet;
-            updateBalanceDisplay();
-            
-            let btn = document.getElementById('aviator-btn');
-            btn.innerText = 'Cash Out';
-            btn.onclick = cashOutAviator;
-            
-            let mult = 1.00;
-            let display = document.getElementById('aviator-display');
-            let crashPoint = (Math.random() * 3 + 1.1).toFixed(2);
-            
-            aviatorInterval = setInterval(() => {
-                mult += 0.05;
-                display.innerText = mult.toFixed(2) + 'x';
-                if(mult >= crashPoint) {
-                    clearInterval(aviatorInterval);
-                    display.innerText = 'Crashed!';
-                    btn.innerText = 'Place Bet';
-                    btn.onclick = startAviator;
+            // Collision with Player
+            const distToPlayer = Math.hypot(player.x - zombie.x, player.y - zombie.y);
+            if (distToPlayer < player.radius + zombie.radius) {
+                health -= 1;
+                updateUI();
+                if (health <= 0) {
+                    isGameOver = true;
+                    document.getElementById("final-score").innerText = score;
+                    document.getElementById("game-over").style.display = "block";
                 }
-            }, 150);
-        }
-
-        function cashOutAviator() {
-            clearInterval(aviatorInterval);
-            let multText = document.getElementById('aviator-display').innerText.replace('x','');
-            let mult = parseFloat(multText) || 1;
-            let bet = parseFloat(document.getElementById('aviator-bet').value);
-            let win = bet * mult;
-            balance += win;
-            updateBalanceDisplay();
-            alert('Congratulations! You won: ₹' + win.toFixed(2));
-            
-            let btn = document.getElementById('aviator-btn');
-            btn.innerText = 'Place Bet';
-            btn.onclick = startAviator;
-        }
-
-        function playSlots() {
-            let bet = parseFloat(document.getElementById('slots-bet').value);
-            if(bet > balance || bet <= 0) { alert('Insufficient balance!'); return; }
-            balance -= bet;
-            
-            let fruits = ['🍒', '🍋', '🍊', '🔔', '⭐'];
-            let f1 = fruits[Math.floor(Math.random()*fruits.length)];
-            let f2 = fruits[Math.floor(Math.random()*fruits.length)];
-            let f3 = fruits[Math.floor(Math.random()*fruits.length)];
-            
-            document.getElementById('slots-display').innerText = f1 + ' ' + f2 + ' ' + f3;
-            
-            if(f1 === f2 && f2 === f3) {
-                let win = bet * 5;
-                balance += win;
-                alert('Bingo! You hit the jackpot: ₹' + win);
-            } else {
-                alert('You lost, try again!');
             }
-            updateBalanceDisplay();
-        }
 
-        function playWinGo(choice) {
-            let bet = parseFloat(document.getElementById('wingo-bet').value);
-            if(bet > balance || bet <= 0) { alert('Insufficient balance!'); return; }
-            balance -= bet;
-            
-            let colors = ['Red', 'Green', 'Red'];
-            let outcome = colors[Math.floor(Math.random()*colors.length)];
-            
-            let resDiv = document.getElementById('wingo-result');
-            if(choice === outcome) {
-                let win = bet * 2;
-                balance += win;
-                resDiv.style.color = '#4caf50';
-                resDiv.innerText = `Result: ${outcome} - You won ₹${win}!`;
-            } else {
-                resDiv.style.color = '#ff5722';
-                resDiv.innerText = `Result: ${outcome} - You lost!`;
-            }
-            updateBalanceDisplay();
-        }
-    </script>
+            // Collision with Bullets
+            bullets.forEach((bullet, bIndex) => {
+                const distToBullet = Math.hypot(bullet.x - zombie.x, bullet.y - zombie.y);
+                if (distToBullet < zombie.radius + bullet.radius) {
+                    zombies.splice(zIndex, 1);
+                    bullets.splice(bIndex, 1);
+                    score += 10;
+                    updateUI();
+                }
+            });
+        });
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    function restartGame() {
+        score = 0;
+        health = 100;
+        ammo = maxAmmo;
+        isGameOver = false;
+        bullets = [];
+        zombies = [];
+        document.getElementById("game-over").style.display = "none";
+        updateUI();
+        gameLoop();
+    }
+
+    resizeCanvas();
+    gameLoop();
+</script>
+
 </body>
 </html>
