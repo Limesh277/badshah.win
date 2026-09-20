@@ -1,191 +1,325 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Badshah.win - Advanced Gaming Platform</title>
+    <title>Badshah.win - Official Gaming Platform</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background: #0b0f19; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 420px; background: #131a2a; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1px solid #ff2a85; }
+        :root {
+            --bg-color: #0f1225;
+            --card-bg: #1a1f3c;
+            --accent-pink: #e91e63;
+            --accent-gold: #ffd700;
+            --text-main: #ffffff;
+            --text-muted: #8f9bb3;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 70px; }
         
-        .header { background: linear-gradient(135deg, #ff2a85, #7928ca); padding: 20px; text-align: center; }
-        .header h1 { font-size: 24px; color: #fff; letter-spacing: 1px; }
-        .wallet-card { background: rgba(0,0,0,0.3); margin: 15px; padding: 15px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.1); }
-        .balance { font-size: 20px; font-weight: bold; color: #00ffcc; }
-        
-        .nav-tabs { display: flex; background: #0b0f19; border-bottom: 1px solid #222; }
-        .tab-btn { flex: 1; padding: 10px; text-align: center; background: none; border: none; color: #888; font-weight: bold; cursor: pointer; font-size: 13px; }
-        .tab-btn.active { color: #ff2a85; border-bottom: 2px solid #ff2a85; }
+        /* Header */
+        .header { background: linear-gradient(135deg, #2c1654, #1a1f3c); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3d2c8d; }
+        .logo { font-size: 22px; font-weight: bold; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; }
+        .user-pill { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
 
-        .section { display: none; padding: 20px; max-height: 480px; overflow-y: auto; }
+        /* Wallet Card */
+        .wallet-card { background: linear-gradient(135deg, #3f1dcb, #9c27b0); margin: 15px; padding: 20px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .balance-title { font-size: 13px; color: #ddd; display: flex; justify-content: space-between; align-items: center; }
+        .balance-amount { font-size: 28px; font-weight: bold; margin: 10px 0; color: #fff; }
+        .wallet-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 14px; }
+        .btn-deposit { background: var(--accent-pink); color: #fff; }
+        .btn-withdraw { background: rgba(255,255,255,0.2); color: #fff; }
+
+        /* Navigation Sections */
+        .section { display: none; padding: 15px; }
         .section.active { display: block; }
 
-        .game-box, .panel-box { background: #1a233a; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-        .timer { font-size: 22px; color: #ffcc00; font-weight: bold; margin: 10px 0; text-align: center; }
-        .color-btns { display: flex; gap: 10px; justify-content: center; margin-top: 15px; }
-        .c-btn { flex: 1; padding: 10px; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; color: #fff; }
-        .btn-green { background: #00cc66; }
-        .btn-violet { background: #9933ff; }
-        .btn-red { background: #ff3333; }
+        /* Categories Grid */
+        .categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; }
+        .cat-item { background: var(--card-bg); padding: 15px 10px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #2d3561; }
+        .cat-icon { font-size: 22px; margin-bottom: 5px; }
+        .cat-name { font-size: 11px; color: var(--text-muted); }
 
-        input { width: 100%; padding: 10px; margin: 8px 0; background: #0b0f19; border: 1px solid #444; color: #fff; border-radius: 6px; font-size: 14px; }
-        .submit-btn { width: 100%; padding: 10px; background: #ff2a85; border: none; color: #fff; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 5px; }
-        .info-text { font-size: 12px; color: #aaa; margin-bottom: 5px; }
+        /* Game Arena (Wingo) */
+        .game-arena { background: var(--card-bg); margin: 15px; padding: 15px; border-radius: 15px; border: 1px solid #3d2c8d; }
+        .timer-box { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; margin-bottom: 15px; }
+        .timer-display { font-size: 22px; font-weight: bold; color: var(--accent-gold); }
+        
+        .color-btns { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-color { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
+        .bg-green { background: #4caf50; }
+        .bg-violet { background: #9c27b0; }
+        .bg-red { background: #f44336; }
+
+        .number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; }
+        .num-btn { aspect-ratio: 1; border-radius: 50%; border: none; background: #28305c; color: white; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* History & Cards */
+        .history-card { background: var(--card-bg); padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #2d3561; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        
+        /* Bottom Nav */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #141830; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #2d3561; z-index: 1000; }
+        .nav-item { text-align: center; color: var(--text-muted); font-size: 11px; cursor: pointer; }
+        .nav-item.active { color: var(--accent-pink); }
+        .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: var(--card-bg); width: 90%; max-width: 400px; padding: 20px; border-radius: 15px; border: 1px solid #3d2c8d; max-height: 90vh; overflow-y: auto; }
+        .input-box { width: 100%; padding: 12px; background: #0f1225; border: 1px solid #2d3561; border-radius: 8px; color: white; margin-bottom: 15px; font-size: 14px; }
+        
+        /* Payment App Buttons */
+        .pay-app-row { display: flex; gap: 10px; margin-bottom: 15px; }
+        .pay-app-btn { flex: 1; padding: 8px; background: #28305c; border: 1px solid #3d2c8d; border-radius: 8px; color: white; font-size: 12px; font-weight: bold; cursor: pointer; text-align: center; }
+        
+        /* Win/Loss Popup Animation */
+        #resultPopup { display: none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%); background: #1a1f3c; border: 2px solid var(--accent-gold); padding: 25px; border-radius: 15px; text-align: center; z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 80%; max-width: 320px; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="header">
-            <h1>Badshah<span>.win</span></h1>
+    <div class="header">
+        <div class="logo">Badshah.win</div>
+        <div class="user-pill">
+            <span>UID: 7216</span>
+            <span style="color: var(--accent-gold);">★ VIP1</span>
         </div>
+    </div>
 
+    <div id="homeSection" class="section active">
         <div class="wallet-card">
-            <div>
-                <p class="info-text">वर्चुअल बैलेंस</p>
-                <div class="balance">₹<span id="wallet-balance">5000.00</span></div>
+            <div class="balance-title">
+                <span>Total Balance</span>
+                <span onclick="location.reload()" style="cursor: pointer;">🔄</span>
             </div>
-            <button class="submit-btn" style="width: auto; padding: 8px 12px;" onclick="switchTab(1)">डिपॉजिट</button>
-        </div>
-
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab(0)">गेम</button>
-            <button class="tab-btn" onclick="switchTab(1)">डिपॉजिट</button>
-            <button class="tab-btn" onclick="switchTab(2)">विड्रॉ</button>
-            <button class="tab-btn" onclick="switchTab(3)">बैंक/प्रोफाइल</button>
-        </div>
-
-        <!-- TAB 0: GAME -->
-        <div id="tab-game" class="section active">
-            <div class="game-box">
-                <h3>कलर प्रेडिक्शन</h3>
-                <div class="timer" id="timer">00:30</div>
-                <div class="color-btns">
-                    <button class="c-btn btn-green" onclick="placeBet('Green')">हरा</button>
-                    <button class="c-btn btn-violet" onclick="placeBet('Violet')">बैंगनी</button>
-                    <button class="c-btn btn-red" onclick="placeBet('Red')">लाल</button>
-                </div>
+            <div class="balance-amount" id="userBalance">₹100.45</div>
+            <div class="wallet-actions">
+                <button class="btn btn-deposit" onclick="openModal('depositModal')">Deposit</button>
+                <button class="btn btn-withdraw" onclick="openModal('withdrawModal')">Withdraw</button>
             </div>
         </div>
 
-        <!-- TAB 1: DEPOSIT (QR & UTR) -->
-        <div id="tab-deposit" class="section">
-            <div class="panel-box" style="text-align: center;">
-                <h3>फंड डिपॉजिट करें</h3>
-                <p class="info-text">अपने QR कोड से स्कैन करके भुगतान करें</p>
-                <div style="background:#fff; color:#000; padding:20px; font-weight:bold; border-radius:8px; margin:10px 0;">[ आपका UPI QR Code ]</div>
-                <p style="color:#00ffcc; font-size:13px;">UPI: milan@upi</p>
-                <input type="number" id="dep-amt" placeholder="रुपये डालें (जैसे 500)">
-                <input type="text" id="utr-no" placeholder="12 अंकों का UTR / Transaction ID">
-                <button class="submit-btn" onclick="submitDeposit()">डिपॉजिट अनुरोध भेजें</button>
-            </div>
+        <div class="categories">
+            <div class="cat-item"><div class="cat-icon">🎲</div><div class="cat-name">Win Go</div></div>
+            <div class="cat-item"><div class="cat-icon">⚡</div><div class="cat-name">K3 Lot</div></div>
+            <div class="cat-item"><div class="cat-icon">✈️</div><div class="cat-name">Aviator</div></div>
+            <div class="cat-item"><div class="cat-icon">🎰</div><div class="cat-name">Slots</div></div>
         </div>
 
-        <!-- TAB 2: WITHDRAWAL (With 3% Tax) -->
-        <div id="tab-withdraw" class="section">
-            <div class="panel-box">
-                <h3>विड्रॉवल (निकासी)</h3>
-                <p class="info-text">3% प्रोसेसिंग टैक्स काटने के बाद राशि आपके बैंक में जाएगी।</p>
-                <input type="number" id="withdraw-amt" placeholder="विड्रॉ अमाउंट दर्ज करें (जैसे 5000)">
-                <button class="submit-btn" onclick="processWithdrawal()">विड्रॉ करें</button>
+        <div class="game-arena">
+            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
+                <span>Win Go 30Sec</span>
+                <span style="font-size:12px; color:var(--accent-gold);">Fair & Secure</span>
             </div>
-        </div>
+            <div class="timer-box">
+                <span>Time Remaining</span>
+                <div class="timer-display" id="timer">00:30</div>
+            </div>
 
-        <!-- TAB 3: BANK BINDING & OTP -->
-        <div id="tab-bank" class="section">
-            <div class="panel-box">
-                <h3>बैंक अकाउंट / UPI जोड़ें</h3>
-                <p class="info-text">खाता सुरक्षित करने के लिए OTP आवश्यक है</p>
-                <input type="text" id="bank-acc" placeholder="बैंक खाता संख्या / UPI ID">
-                <input type="text" id="ifsc-code" placeholder="IFSC कोड">
-                <button class="submit-btn" onclick="sendOtp()">OTP भेजें</button>
-                
-                <div id="otp-section" style="margin-top: 10px; display:none;">
-                    <input type="text" id="otp-input" placeholder="4 अंकों का OTP दर्ज करें (डिफ़ॉल्ट: 1234)">
-                    <button class="submit-btn" style="background:#00cc66;" onclick="verifyAndSaveBank()">खाता लिंक करें</button>
-                </div>
+            <div class="color-btns">
+                <button class="btn-color bg-green" onclick="placeBet('Green', 2)">Green (2x)</button>
+                <button class="btn-color bg-violet" onclick="placeBet('Violet', 4.5)">Violet (4.5x)</button>
+                <button class="btn-color bg-red" onclick="placeBet('Red', 2)">Red (2x)</button>
+            </div>
+
+            <div class="number-grid">
+                <button class="num-btn" onclick="placeBet(0, 9)">0</button>
+                <button class="num-btn" onclick="placeBet(1, 9)">1</button>
+                <button class="num-btn" onclick="placeBet(2, 9)">2</button>
+                <button class="num-btn" onclick="placeBet(3, 9)">3</button>
+                <button class="num-btn" onclick="placeBet(4, 9)">4</button>
+                <button class="num-btn" onclick="placeBet(5, 9)">5</button>
+                <button class="num-btn" onclick="placeBet(6, 9)">6</button>
+                <button class="num-btn" onclick="placeBet(7, 9)">7</button>
+                <button class="num-btn" onclick="placeBet(8, 9)">8</button>
+                <button class="num-btn" onclick="placeBet(9, 9)">9</button>
             </div>
         </div>
     </div>
 
-    <script>
-        let balance = 5000.00;
-        let isBankLinked = false;
+    <div id="activitySection" class="section">
+        <h2 style="margin-bottom: 15px; font-size:18px;">Activity & Rewards</h2>
+        <div class="history-card">
+            <div><b>Attendance Bonus</b><br><span style="font-size:11px; color:var(--text-muted);">Check in daily to earn more</span></div>
+            <button class="btn btn-deposit" style="padding: 5px 10px;" onclick="alert('Claimed ₹10 Successfully!')">Claim</button>
+        </div>
+        <div class="history-card">
+            <div><b>Super Jackpot</b><br><span style="font-size:11px; color:var(--text-muted);">Unlock daily rewards</span></div>
+            <button class="btn btn-deposit" style="padding: 5px 10px;" onclick="alert('Already Claimed')">Check</button>
+        </div>
+    </div>
 
-        function switchTab(index) {
-            const tabs = document.querySelectorAll('.section');
-            const btns = document.querySelectorAll('.tab-btn');
-            tabs.forEach(t => t.classList.remove('active'));
-            btns.forEach(b => b.classList.remove('active'));
-            tabs[index].classList.add('active');
-            btns[index].classList.add('active');
+    <div id="promotionSection" class="section">
+        <h2 style="margin-bottom: 15px; font-size:18px;">Agency & Commission</h2>
+        <div class="wallet-card" style="background: linear-gradient(135deg, #1f4068, #1b1b2f);">
+            <div style="font-size: 13px; color: #ddd;">Invitation Link</div>
+            <input type="text" class="input-box" value="https://badshah.win/#/register?ref=7216" readonly style="margin-top: 8px; margin-bottom: 5px;">
+            <button class="btn btn-deposit" style="width: 100%;" onclick="navigator.clipboard.writeText('https://badshah.win/#/register?ref=7216'); alert('Invitation Link Copied!');">Copy Link</button>
+        </div>
+    </div>
+
+    <div id="accountSection" class="section">
+        <h2 style="margin-bottom: 15px; font-size:18px;">My Account & History</h2>
+        <div class="history-card" onclick="openModal('depositHistModal')" style="cursor:pointer;">
+            <span>📋 Deposit History</span> <span>›</span>
+        </div>
+        <div class="history-card" onclick="openModal('withdrawHistModal')" style="cursor:pointer;">
+            <span>📜 Withdrawal History</span> <span>›</span>
+        </div>
+        <div class="history-card" onclick="alert('Logged out safely')" style="cursor:pointer; color: #f44336;">
+            <span>🚪 Log Out</span> <span>›</span>
+        </div>
+    </div>
+
+    <div class="modal" id="depositModal">
+        <div class="modal-content">
+            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
+                <span>Deposit Funds (Min ₹100)</span>
+                <span onclick="closeModal('depositModal')" style="cursor:pointer;">✕</span>
+            </div>
+            
+            <div class="pay-app-row">
+                <button class="pay-app-btn" onclick="alert('Opening Paytm...')">Paytm Pay</button>
+                <button class="pay-app-btn" onclick="alert('Opening PhonePe...')">PhonePe</button>
+            </div>
+
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px; text-align:center;">Scan QR Code to pay via UPI</p>
+            
+            <div style="text-align: center; background: white; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                <img src="http://googleusercontent.com/image_generation_content/1000118135.jpg-e98b108b-cda8-4c56-a4a5-332f2e09172a" alt="UPI QR" style="width:150px; height:150px; object-fit:contain;">
+                <p style="color: black; font-size: 11px; margin-top: 5px; font-weight:bold;">Scan & Pay via any UPI App</p>
+            </div>
+
+            <input type="number" class="input-box" id="depAmt" placeholder="Enter Amount (Min ₹100)">
+            <input type="text" class="input-box" placeholder="Enter 12-digit UTR / Transaction ID">
+            <button class="btn btn-deposit" style="width: 100%;" onclick="submitDeposit()">Submit UTR</button>
+        </div>
+    </div>
+
+    <div class="modal" id="withdrawModal">
+        <div class="modal-content">
+            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
+                <span>Withdrawal (3% Fee)</span>
+                <span onclick="closeModal('withdrawModal')" style="cursor:pointer;">✕</span>
+            </div>
+            <input type="number" class="input-box" id="withAmt" placeholder="Enter Withdrawal Amount">
+            <input type="text" class="input-box" placeholder="Enter Bank Account / UPI ID">
+            <button class="btn btn-deposit" style="width: 100%;" onclick="submitWithdraw()">Withdraw Now</button>
+        </div>
+    </div>
+
+    <div class="modal" id="depositHistModal">
+        <div class="modal-content">
+            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
+                <span>Deposit History</span>
+                <span onclick="closeModal('depositHistModal')" style="cursor:pointer;">✕</span>
+            </div>
+            <div class="history-card"><span>₹1,000.00 (PhonePe)</span> <span style="color:#4caf50;">Complete</span></div>
+            <div class="history-card"><span>₹500.00 (QR Code)</span> <span style="color:#4caf50;">Complete</span></div>
+        </div>
+    </div>
+
+    <div class="modal" id="withdrawHistModal">
+        <div class="modal-content">
+            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
+                <span>Withdrawal History</span>
+                <span onclick="closeModal('withdrawHistModal')" style="cursor:pointer;">✕</span>
+            </div>
+            <div class="history-card"><span>₹500.00 to Bank</span> <span style="color:#4caf50;">Success</span></div>
+        </div>
+    </div>
+
+    <div id="resultPopup">
+        <h2 id="resTitle" style="margin-bottom: 10px;">🎉 Congratulations!</h2>
+        <p id="resDesc" style="font-size: 14px; color: #ddd; margin-bottom: 15px;">You won ₹200.00</p>
+        <button class="btn btn-deposit" onclick="document.getElementById('resultPopup').style.display='none'">OK</button>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('homeSection', this)"><span class="nav-icon">🏠</span>Home</div>
+        <div class="nav-item" onclick="switchTab('activitySection', this)"><span class="nav-icon">🎁</span>Activity</div>
+        <div class="nav-item" onclick="switchTab('promotionSection', this)"><span class="nav-icon">📢</span>Promotion</div>
+        <div class="nav-item" onclick="switchTab('accountSection', this)"><span class="nav-icon">👤</span>Account</div>
+    </div>
+
+    <script>
+        // Tab Switcher
+        function switchTab(sectionId, element) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // Timer Logic
+        let timeLeft = 30;
+        const timerDisplay = document.getElementById('timer');
+        setInterval(() => {
+            timeLeft--;
+            if(timeLeft < 0) timeLeft = 30;
+            timerDisplay.textContent = `00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
+        }, 1000);
+
+        // Modal Controls
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // Betting & Win/Loss Simulator
+        function placeBet(option, multiplier) {
+            let balanceElem = document.getElementById('userBalance');
+            let currentBal = parseFloat(balanceElem.textContent.replace('₹', ''));
+            let betAmount = 50; // default bet
+
+            if(currentBal < betAmount) {
+                alert('Insufficient Balance! Please Deposit.');
+                openModal('depositModal');
+                return;
+            }
+
+            currentBal -= betAmount;
+            balanceElem.textContent = `₹${currentBal.toFixed(2)}`;
+
+            setTimeout(() => {
+                let isWin = Math.random() > 0.4; // 60% win chance
+                let popup = document.getElementById('resultPopup');
+                let rTitle = document.getElementById('resTitle');
+                let rDesc = document.getElementById('resDesc');
+
+                if(isWin) {
+                    let winAmt = betAmount * multiplier;
+                    currentBal += winAmt;
+                    balanceElem.textContent = `₹${currentBal.toFixed(2)}`;
+                    rTitle.style.color = '#4caf50';
+                    rTitle.textContent = '🎉 Congratulations!';
+                    rDesc.textContent = `You won ₹${winAmt.toFixed(2)} on selecting ${option}`;
+                } else {
+                    rTitle.style.color = '#f44336';
+                    rTitle.textContent = '❌ Ohh No! You Lost';
+                    rDesc.textContent = `Better luck next time. Try again!`;
+                }
+                popup.style.display = 'block';
+            }, 1200);
         }
 
         function submitDeposit() {
-            let amt = parseFloat(document.getElementById('dep-amt').value);
-            let utr = document.getElementById('utr-no').value;
-            if(!amt || !utr) { alert('कृपया सभी जानकारी भरें!'); return; }
-            balance += amt;
-            document.getElementById('wallet-balance').innerText = balance.toFixed(2);
-            alert(`सफलतापूर्वक ₹${amt} आपके वॉलेट में जुड़ गए! (UTR: ${utr})`);
-            document.getElementById('dep-amt').value = '';
-            document.getElementById('utr-no').value = '';
-            switchTab(0);
-        }
-
-        function sendOtp() {
-            let acc = document.getElementById('bank-acc').value;
-            if(!acc) { alert('कृपया बैंक अकाउंट या UPI ID दर्ज करें!'); return; }
-            alert('आपके रजिस्टर्ड मोबाइल नंबर पर OTP भेजा गया है! (सिम्युलेशन OTP: 1234)');
-            document.getElementById('otp-section').style.display = 'block';
-        }
-
-        function verifyAndSaveBank() {
-            let otp = document.getElementById('otp-input').value;
-            if(otp === '1234') {
-                isBankLinked = true;
-                alert('बैंक अकाउंट सफलतापूर्वक वेरीफाई और लिंक हो गया है!');
-                switchTab(2);
-            } else {
-                alert('गलत OTP! कृपया दोबारा प्रयास करें।');
+            let amt = document.getElementById('depAmt').value;
+            if(!amt || amt < 100) { 
+                alert('Minimum deposit amount is ₹100'); 
+                return; 
             }
+            alert('Deposit UTR Submitted! Pending verification.');
+            closeModal('depositModal');
         }
 
-        function processWithdrawal() {
-            if(!isBankLinked) {
-                alert('पहले कृपया बैंक अकाउंट या UPI लिंक करें!');
-                switchTab(3);
-                return;
+        function submitWithdraw() {
+            let amt = document.getElementById('withAmt').value;
+            if(!amt || amt <= 0) { 
+                alert('Please enter valid withdrawal amount'); 
+                return; 
             }
-            let wAmt = parseFloat(document.getElementById('withdraw-amt').value);
-            if(!wAmt || wAmt <= 0) { alert('सही राशि दर्ज करें!'); return; }
-            if(wAmt > balance) { alert('वॉलेट में पर्याप्त बैलेंस नहीं है!'); return; }
-
-            // 3% Tax Calculation
-            let tax = wAmt * 0.03;
-            let finalAmount = wAmt - tax;
-
-            balance -= wAmt;
-            document.getElementById('wallet-balance').innerText = balance.toFixed(2);
-            alert(`विड्रॉवल सफल!\nRequested: ₹${wAmt}\n3% Tax Deducted: ₹${tax.toFixed(2)}\nTransferred to Bank: ₹${finalAmount.toFixed(2)}`);
-            document.getElementById('withdraw-amt').value = '';
+            alert(`Withdrawal of ₹${amt} requested successfully! (3% fee deducted)`);
+            closeModal('withdrawModal');
         }
-
-        function placeBet(color) {
-            if(balance < 100) { alert('पर्याप्त बैलेंस नहीं है!'); return; }
-            balance -= 100;
-            document.getElementById('wallet-balance').innerText = balance.toFixed(2);
-            alert(`₹100 ${color} पर दांव लगाया गया।`);
-        }
-
-        // Timer
-        let t = 30;
-        setInterval(() => {
-            t--; if(t < 0) t = 30;
-            let s = t < 10 ? '0' + t : t;
-            document.getElementById('timer').innerText = `00:${s}`;
-        }, 1000);
     </script>
 </body>
 </html>
