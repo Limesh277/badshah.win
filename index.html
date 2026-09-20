@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,314 +11,344 @@
             --accent-pink: #e91e63;
             --accent-gold: #ffd700;
             --text-main: #ffffff;
-            --text-muted: #8f9bb3;
+            --text-muted: #8f9b63;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-main); padding-bottom: 70px; }
+        body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; }
+        .container { max-width: 480px; margin: 0 auto; padding: 15px; }
         
-        /* Header */
-        .header { background: linear-gradient(135deg, #2c1654, #1a1f3c); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #3d2c8d; }
-        .logo { font-size: 22px; font-weight: bold; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 1px; }
-        .user-pill { background: rgba(255,255,255,0.1); padding: 5px 12px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 6px; }
+        /* Hidden class */
+        .hidden { display: none !important; }
 
-        /* Wallet Card */
-        .wallet-card { background: linear-gradient(135deg, #3f1dcb, #9c27b0); margin: 15px; padding: 20px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        .balance-title { font-size: 13px; color: #ddd; display: flex; justify-content: space-between; align-items: center; }
-        .balance-amount { font-size: 28px; font-weight: bold; margin: 10px 0; color: #fff; }
-        .wallet-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-align: center; font-size: 14px; }
-        .btn-deposit { background: var(--accent-pink); color: #fff; }
-        .btn-withdraw { background: rgba(255,255,255,0.2); color: #fff; }
+        /* Auth Screen Style */
+        #auth-screen {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 20px;
+        }
+        .auth-card {
+            background: var(--card-bg); width: 100%; padding: 30px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .auth-card h2 { color: var(--accent-gold); margin-bottom: 20px; font-size: 26px; }
+        .auth-input {
+            width: 100%; padding: 12px 15px; margin-bottom: 15px; background: #0f1225; border: 1px solid #333954;
+            border-radius: 8px; color: #fff; font-size: 16px; outline: none;
+        }
+        .auth-btn {
+            width: 100%; padding: 12px; background: var(--accent-pink); border: none; border-radius: 8px;
+            color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .auth-btn:active { transform: scale(0.98); }
+        .switch-text { margin-top: 15px; font-size: 14px; color: #aaa; cursor: pointer; }
+        .switch-text span { color: var(--accent-gold); text-decoration: underline; }
 
-        /* Navigation Sections */
-        .section { display: none; padding: 15px; }
-        .section.active { display: block; }
+        /* Dashboard Style */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #222; }
+        header h1 { font-size: 20px; color: var(--accent-gold); }
+        .wallet-card { background: linear-gradient(135deg, #e91e63, #7928ca); padding: 20px; border-radius: 16px; margin: 20px 0; text-align: center; }
+        .wallet-card h3 { font-size: 14px; opacity: 0.9; }
+        .wallet-card .balance { font-size: 32px; font-weight: bold; margin: 10px 0; }
+        .wallet-actions { display: flex; gap: 10px; justify-content: center; }
+        .wallet-btn { padding: 8px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-dep { background: #4caf50; color: #fff; }
+        .btn-wit { background: #ff5722; color: #fff; }
 
-        /* Categories Grid */
-        .categories { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 15px; }
-        .cat-item { background: var(--card-bg); padding: 15px 10px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #2d3561; }
-        .cat-icon { font-size: 22px; margin-bottom: 5px; }
-        .cat-name { font-size: 11px; color: var(--text-muted); }
+        /* Games Grid */
+        .games-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 20px; }
+        .game-card { background: var(--card-bg); padding: 20px; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid #2a3158; }
+        .game-card h4 { margin-top: 10px; font-size: 16px; }
 
-        /* Game Arena (Wingo) */
-        .game-arena { background: var(--card-bg); margin: 15px; padding: 15px; border-radius: 15px; border: 1px solid #3d2c8d; }
-        .timer-box { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 10px; margin-bottom: 15px; }
-        .timer-display { font-size: 22px; font-weight: bold; color: var(--accent-gold); }
+        /* Game Screens */
+        .game-screen { background: var(--card-bg); padding: 20px; border-radius: 12px; margin-top: 20px; text-align: center; }
+        .back-btn { background: none; border: 1px solid #555; color: #fff; padding: 5px 15px; border-radius: 5px; cursor: pointer; float: left; margin-bottom: 10px; }
         
-        .color-btns { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-color { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
-        .bg-green { background: #4caf50; }
-        .bg-violet { background: #9c27b0; }
-        .bg-red { background: #f44336; }
-
-        .number-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 15px; }
-        .num-btn { aspect-ratio: 1; border-radius: 50%; border: none; background: #28305c; color: white; font-weight: bold; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-
-        /* History & Cards */
-        .history-card { background: var(--card-bg); padding: 12px; border-radius: 10px; margin-bottom: 10px; border: 1px solid #2d3561; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+        /* Aviator Game Styles */
+        #aviator-display { font-size: 40px; font-weight: bold; color: var(--accent-gold); margin: 30px 0; }
         
-        /* Bottom Nav */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #141830; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #2d3561; z-index: 1000; }
-        .nav-item { text-align: center; color: var(--text-muted); font-size: 11px; cursor: pointer; }
-        .nav-item.active { color: var(--accent-pink); }
-        .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
-
         /* Modals */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: var(--card-bg); width: 90%; max-width: 400px; padding: 20px; border-radius: 15px; border: 1px solid #3d2c8d; max-height: 90vh; overflow-y: auto; }
-        .input-box { width: 100%; padding: 12px; background: #0f1225; border: 1px solid #2d3561; border-radius: 8px; color: white; margin-bottom: 15px; font-size: 14px; }
-        
-        /* Payment App Buttons */
-        .pay-app-row { display: flex; gap: 10px; margin-bottom: 15px; }
-        .pay-app-btn { flex: 1; padding: 8px; background: #28305c; border: 1px solid #3d2c8d; border-radius: 8px; color: white; font-size: 12px; font-weight: bold; cursor: pointer; text-align: center; }
-        
-        /* Win/Loss Popup Animation */
-        #resultPopup { display: none; position: fixed; top: 30%; left: 50%; transform: translate(-50%, -50%); background: #1a1f3c; border: 2px solid var(--accent-gold); padding: 25px; border-radius: 15px; text-align: center; z-index: 3000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 80%; max-width: 320px; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 100; }
+        .modal-content { background: var(--card-bg); width: 90%; max-width: 400px; padding: 25px; border-radius: 16px; text-align: center; position: relative; }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo">Badshah.win</div>
-        <div class="user-pill">
-            <span>UID: 7216</span>
-            <span style="color: var(--accent-gold);">★ VIP1</span>
+    <!-- 1. LOGIN & REGISTER SCREEN -->
+    <div id="auth-screen" class="container">
+        <div class="auth-card" id="login-box">
+            <h2>Badshah.win Login</h2>
+            <input type="text" id="login-phone" class="auth-input" placeholder="मोबाइल नंबर दर्ज करें">
+            <input type="password" id="login-pass" class="auth-input" placeholder="पासवर्ड दर्ज करें">
+            <button class="auth-btn" onclick="handleLogin()">लॉग इन करें</button>
+            <div class="switch-text" onclick="toggleAuth('register')">अकाउंट नहीं है? <span>रजिस्टर करें</span></div>
+        </div>
+
+        <div class="auth-card hidden" id="register-box">
+            <h2>नया अकाउंट बनाएँ</h2>
+            <input type="text" id="reg-phone" class="auth-input" placeholder="मोबाइल नंबर दर्ज करें">
+            <input type="password" id="reg-pass" class="auth-input" placeholder="पासवर्ड बनाएँ">
+            <button class="auth-btn" onclick="handleRegister()">रजिस्टर करें</button>
+            <div class="switch-text" onclick="toggleAuth('login')">पहले से अकाउंट है? <span>लॉग इन करें</span></div>
         </div>
     </div>
 
-    <div id="homeSection" class="section active">
+    <!-- 2. MAIN DASHBOARD SCREEN -->
+    <div id="dashboard-screen" class="container hidden">
+        <header>
+            <h1>BADSHAH.WIN</h1>
+            <button class="back-btn" onclick="handleLogout()" style="float:none;">लॉग आउट</button>
+        </header>
+
         <div class="wallet-card">
-            <div class="balance-title">
-                <span>Total Balance</span>
-                <span onclick="location.reload()" style="cursor: pointer;">🔄</span>
-            </div>
-            <div class="balance-amount" id="userBalance">₹100.45</div>
+            <h3>कुल बैलेंस</h3>
+            <div class="balance" id="user-balance">₹0.00</div>
             <div class="wallet-actions">
-                <button class="btn btn-deposit" onclick="openModal('depositModal')">Deposit</button>
-                <button class="btn btn-withdraw" onclick="openModal('withdrawModal')">Withdraw</button>
+                <button class="wallet-btn btn-dep" onclick="openModal('deposit-modal')">डिपॉजिट</button>
+                <button class="wallet-btn btn-wit" onclick="openModal('withdraw-modal')">निकासी (Withdraw)</button>
             </div>
         </div>
 
-        <div class="categories">
-            <div class="cat-item"><div class="cat-icon">🎲</div><div class="cat-name">Win Go</div></div>
-            <div class="cat-item"><div class="cat-icon">⚡</div><div class="cat-name">K3 Lot</div></div>
-            <div class="cat-item"><div class="cat-icon">✈️</div><div class="cat-name">Aviator</div></div>
-            <div class="cat-item"><div class="cat-icon">🎰</div><div class="cat-name">Slots</div></div>
-        </div>
-
-        <div class="game-arena">
-            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
-                <span>Win Go 30Sec</span>
-                <span style="font-size:12px; color:var(--accent-gold);">Fair & Secure</span>
+        <h3>लोकप्रिय गेम्स</h3>
+        <div class="games-grid">
+            <div class="game-card" onclick="openGame('aviator')">
+                <span style="font-size: 30px;">✈️</span>
+                <h4>Aviator</h4>
             </div>
-            <div class="timer-box">
-                <span>Time Remaining</span>
-                <div class="timer-display" id="timer">00:30</div>
+            <div class="game-card" onclick="openGame('slots')">
+                <span style="font-size: 30px;">🎰</span>
+                <h4>Slots Mania</h4>
             </div>
-
-            <div class="color-btns">
-                <button class="btn-color bg-green" onclick="placeBet('Green', 2)">Green (2x)</button>
-                <button class="btn-color bg-violet" onclick="placeBet('Violet', 4.5)">Violet (4.5x)</button>
-                <button class="btn-color bg-red" onclick="placeBet('Red', 2)">Red (2x)</button>
-            </div>
-
-            <div class="number-grid">
-                <button class="num-btn" onclick="placeBet(0, 9)">0</button>
-                <button class="num-btn" onclick="placeBet(1, 9)">1</button>
-                <button class="num-btn" onclick="placeBet(2, 9)">2</button>
-                <button class="num-btn" onclick="placeBet(3, 9)">3</button>
-                <button class="num-btn" onclick="placeBet(4, 9)">4</button>
-                <button class="num-btn" onclick="placeBet(5, 9)">5</button>
-                <button class="num-btn" onclick="placeBet(6, 9)">6</button>
-                <button class="num-btn" onclick="placeBet(7, 9)">7</button>
-                <button class="num-btn" onclick="placeBet(8, 9)">8</button>
-                <button class="num-btn" onclick="placeBet(9, 9)">9</button>
+            <div class="game-card" onclick="openGame('wingo')">
+                <span style="font-size: 30px;">🔴</span>
+                <h4>Win Go (Color)</h4>
             </div>
         </div>
     </div>
 
-    <div id="activitySection" class="section">
-        <h2 style="margin-bottom: 15px; font-size:18px;">Activity & Rewards</h2>
-        <div class="history-card">
-            <div><b>Attendance Bonus</b><br><span style="font-size:11px; color:var(--text-muted);">Check in daily to earn more</span></div>
-            <button class="btn btn-deposit" style="padding: 5px 10px;" onclick="alert('Claimed ₹10 Successfully!')">Claim</button>
-        </div>
-        <div class="history-card">
-            <div><b>Super Jackpot</b><br><span style="font-size:11px; color:var(--text-muted);">Unlock daily rewards</span></div>
-            <button class="btn btn-deposit" style="padding: 5px 10px;" onclick="alert('Already Claimed')">Check</button>
-        </div>
-    </div>
-
-    <div id="promotionSection" class="section">
-        <h2 style="margin-bottom: 15px; font-size:18px;">Agency & Commission</h2>
-        <div class="wallet-card" style="background: linear-gradient(135deg, #1f4068, #1b1b2f);">
-            <div style="font-size: 13px; color: #ddd;">Invitation Link</div>
-            <input type="text" class="input-box" value="https://badshah.win/#/register?ref=7216" readonly style="margin-top: 8px; margin-bottom: 5px;">
-            <button class="btn btn-deposit" style="width: 100%;" onclick="navigator.clipboard.writeText('https://badshah.win/#/register?ref=7216'); alert('Invitation Link Copied!');">Copy Link</button>
+    <!-- 3. AVIATOR GAME SCREEN -->
+    <div id="aviator-screen" class="container hidden">
+        <button class="back-btn" onclick="closeGame()">← वापस</button>
+        <div class="game-screen">
+            <h2>✈️ Aviator Crash Game</h2>
+            <div id="aviator-display">1.00x</div>
+            <input type="number" id="aviator-bet" class="auth-input" placeholder="बैट राशि (₹)" value="100">
+            <button class="auth-btn" id="aviator-btn" onclick="startAviator()">उड़ान भरें (Bet)</button>
         </div>
     </div>
 
-    <div id="accountSection" class="section">
-        <h2 style="margin-bottom: 15px; font-size:18px;">My Account & History</h2>
-        <div class="history-card" onclick="openModal('depositHistModal')" style="cursor:pointer;">
-            <span>📋 Deposit History</span> <span>›</span>
-        </div>
-        <div class="history-card" onclick="openModal('withdrawHistModal')" style="cursor:pointer;">
-            <span>📜 Withdrawal History</span> <span>›</span>
-        </div>
-        <div class="history-card" onclick="alert('Logged out safely')" style="cursor:pointer; color: #f44336;">
-            <span>🚪 Log Out</span> <span>›</span>
+    <!-- 4. SLOTS GAME SCREEN -->
+    <div id="slots-screen" class="container hidden">
+        <button class="back-btn" onclick="closeGame()">← वापस</button>
+        <div class="game-screen">
+            <h2>🎰 Slots Machine</h2>
+            <div id="slots-display" style="font-size: 40px; margin: 30px 0; letter-spacing: 15px;">🍒 🍋 🍊</div>
+            <input type="number" id="slots-bet" class="auth-input" placeholder="बैट राशि (₹)" value="50">
+            <button class="auth-btn" onclick="playSlots()">स्पिन करें</button>
         </div>
     </div>
 
-    <div class="modal" id="depositModal">
+    <!-- 5. WIN GO GAME SCREEN -->
+    <div id="wingo-screen" class="container hidden">
+        <button class="back-btn" onclick="closeGame()">← वापस</button>
+        <div class="game-screen">
+            <h2>🔴 Win Go Color Prediction</h2>
+            <div id="wingo-timer" style="font-size: 24px; color: var(--accent-gold); margin: 15px 0;">समय शेष: 30s</div>
+            <input type="number" id="wingo-bet" class="auth-input" placeholder="राशि (₹)" value="10">
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button class="auth-btn" style="background: #e91e63;" onclick="playWinGo('Red')">लाल (Red)</button>
+                <button class="auth-btn" style="background: #4caf50;" onclick="playWinGo('Green')">हरा (Green)</button>
+            </div>
+            <div id="wingo-result" style="font-weight: bold; margin-top: 10px;"></div>
+        </div>
+    </div>
+
+    <!-- DEPOSIT MODAL -->
+    <div id="deposit-modal" class="modal hidden">
         <div class="modal-content">
-            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
-                <span>Deposit Funds (Min ₹100)</span>
-                <span onclick="closeModal('depositModal')" style="cursor:pointer;">✕</span>
+            <span class="close-modal" onclick="closeModal('deposit-modal')">&times;</span>
+            <h3 style="color: var(--accent-gold); margin-bottom: 15px;">पैसे जमा करें (Min ₹100)</h3>
+            <div style="background:#fff; padding:10px; display:inline-block; border-radius:8px; margin-bottom:15px;">
+                <!-- यहाँ आपका क्यूआर कोड सेट है -->
+                <img src="qr.png" alt="QR Code" style="width: 150px; height: 150px;" onerror="this.src='https://via.placeholder.com/150?text=QR+Code'">
             </div>
-            
-            <div class="pay-app-row">
-                <button class="pay-app-btn" onclick="alert('Opening Paytm...')">Paytm Pay</button>
-                <button class="pay-app-btn" onclick="alert('Opening PhonePe...')">PhonePe</button>
-            </div>
-
-            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px; text-align:center;">Scan QR Code to pay via UPI</p>
-            
-            <div style="text-align: center; background: white; padding: 10px; border-radius: 8px; margin-bottom: 15px;">
-                <img src="http://googleusercontent.com/image_generation_content/1000118135.jpg-e98b108b-cda8-4c56-a4a5-332f2e09172a" alt="UPI QR" style="width:150px; height:150px; object-fit:contain;">
-                <p style="color: black; font-size: 11px; margin-top: 5px; font-weight:bold;">Scan & Pay via any UPI App</p>
-            </div>
-
-            <input type="number" class="input-box" id="depAmt" placeholder="Enter Amount (Min ₹100)">
-            <input type="text" class="input-box" placeholder="Enter 12-digit UTR / Transaction ID">
-            <button class="btn btn-deposit" style="width: 100%;" onclick="submitDeposit()">Submit UTR</button>
+            <p style="font-size: 14px; margin-bottom: 15px;">UPI ID: <b>your-upi@okhdfcbank</b></p>
+            <input type="number" id="dep-amount" class="auth-input" placeholder="राशि दर्ज करें (₹)">
+            <input type="text" id="dep-utr" class="auth-input" placeholder="12-अंक का UTR नंबर दर्ज करें">
+            <button class="auth-btn" onclick="submitDeposit()">डिपॉजिट सबमिट करें</button>
         </div>
     </div>
 
-    <div class="modal" id="withdrawModal">
+    <!-- WITHDRAW MODAL -->
+    <div id="withdraw-modal" class="modal hidden">
         <div class="modal-content">
-            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
-                <span>Withdrawal (3% Fee)</span>
-                <span onclick="closeModal('withdrawModal')" style="cursor:pointer;">✕</span>
-            </div>
-            <input type="number" class="input-box" id="withAmt" placeholder="Enter Withdrawal Amount">
-            <input type="text" class="input-box" placeholder="Enter Bank Account / UPI ID">
-            <button class="btn btn-deposit" style="width: 100%;" onclick="submitWithdraw()">Withdraw Now</button>
+            <span class="close-modal" onclick="closeModal('withdraw-modal')">&times;</span>
+            <h3 style="color: var(--accent-gold); margin-bottom: 15px;">बैंक में पैसे भेजें</h3>
+            <input type="number" id="wit-amount" class="auth-input" placeholder="निकासी राशि (₹)">
+            <input type="text" id="wit-upi" class="auth-input" placeholder="अपनी UPI ID दर्ज करें">
+            <button class="auth-btn" onclick="submitWithdraw()">निकासी का अनुरोध करें</button>
         </div>
-    </div>
-
-    <div class="modal" id="depositHistModal">
-        <div class="modal-content">
-            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
-                <span>Deposit History</span>
-                <span onclick="closeModal('depositHistModal')" style="cursor:pointer;">✕</span>
-            </div>
-            <div class="history-card"><span>₹1,000.00 (PhonePe)</span> <span style="color:#4caf50;">Complete</span></div>
-            <div class="history-card"><span>₹500.00 (QR Code)</span> <span style="color:#4caf50;">Complete</span></div>
-        </div>
-    </div>
-
-    <div class="modal" id="withdrawHistModal">
-        <div class="modal-content">
-            <div style="font-weight: bold; margin-bottom: 10px; display:flex; justify-content:space-between;">
-                <span>Withdrawal History</span>
-                <span onclick="closeModal('withdrawHistModal')" style="cursor:pointer;">✕</span>
-            </div>
-            <div class="history-card"><span>₹500.00 to Bank</span> <span style="color:#4caf50;">Success</span></div>
-        </div>
-    </div>
-
-    <div id="resultPopup">
-        <h2 id="resTitle" style="margin-bottom: 10px;">🎉 Congratulations!</h2>
-        <p id="resDesc" style="font-size: 14px; color: #ddd; margin-bottom: 15px;">You won ₹200.00</p>
-        <button class="btn btn-deposit" onclick="document.getElementById('resultPopup').style.display='none'">OK</button>
-    </div>
-
-    <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('homeSection', this)"><span class="nav-icon">🏠</span>Home</div>
-        <div class="nav-item" onclick="switchTab('activitySection', this)"><span class="nav-icon">🎁</span>Activity</div>
-        <div class="nav-item" onclick="switchTab('promotionSection', this)"><span class="nav-icon">📢</span>Promotion</div>
-        <div class="nav-item" onclick="switchTab('accountSection', this)"><span class="nav-icon">👤</span>Account</div>
     </div>
 
     <script>
-        // Tab Switcher
-        function switchTab(sectionId, element) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            element.classList.add('active');
+        let balance = 500.00; // शुरुआती डेमो बैलेंस
+
+        function updateBalanceDisplay() {
+            document.getElementById('user-balance').innerText = '₹' + balance.toFixed(2);
         }
 
-        // Timer Logic
-        let timeLeft = 30;
-        const timerDisplay = document.getElementById('timer');
-        setInterval(() => {
-            timeLeft--;
-            if(timeLeft < 0) timeLeft = 30;
-            timerDisplay.textContent = `00:${timeLeft < 10 ? '0' : ''}${timeLeft}`;
-        }, 1000);
-
-        // Modal Controls
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-        // Betting & Win/Loss Simulator
-        function placeBet(option, multiplier) {
-            let balanceElem = document.getElementById('userBalance');
-            let currentBal = parseFloat(balanceElem.textContent.replace('₹', ''));
-            let betAmount = 50; // default bet
-
-            if(currentBal < betAmount) {
-                alert('Insufficient Balance! Please Deposit.');
-                openModal('depositModal');
-                return;
+        function toggleAuth(type) {
+            if(type === 'register') {
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('register-box').classList.remove('hidden');
+            } else {
+                document.getElementById('register-box').classList.add('hidden');
+                document.getElementById('login-box').classList.remove('hidden');
             }
-
-            currentBal -= betAmount;
-            balanceElem.textContent = `₹${currentBal.toFixed(2)}`;
-
-            setTimeout(() => {
-                let isWin = Math.random() > 0.4; // 60% win chance
-                let popup = document.getElementById('resultPopup');
-                let rTitle = document.getElementById('resTitle');
-                let rDesc = document.getElementById('resDesc');
-
-                if(isWin) {
-                    let winAmt = betAmount * multiplier;
-                    currentBal += winAmt;
-                    balanceElem.textContent = `₹${currentBal.toFixed(2)}`;
-                    rTitle.style.color = '#4caf50';
-                    rTitle.textContent = '🎉 Congratulations!';
-                    rDesc.textContent = `You won ₹${winAmt.toFixed(2)} on selecting ${option}`;
-                } else {
-                    rTitle.style.color = '#f44336';
-                    rTitle.textContent = '❌ Ohh No! You Lost';
-                    rDesc.textContent = `Better luck next time. Try again!`;
-                }
-                popup.style.display = 'block';
-            }, 1200);
         }
+
+        function handleLogin() {
+            let phone = document.getElementById('login-phone').value;
+            if(!phone) { alert('कृपया मोबाइल नंबर दर्ज करें!'); return; }
+            document.getElementById('auth-screen').classList.add('hidden');
+            document.getElementById('dashboard-screen').classList.remove('hidden');
+            updateBalanceDisplay();
+        }
+
+        function handleRegister() {
+            let phone = document.getElementById('reg-phone').value;
+            if(!phone) { alert('कृपया सही विवरण भरें!'); return; }
+            alert('रजिस्ट्रेशन सफल! अब लॉगिन करें।');
+            toggleAuth('login');
+        }
+
+        function handleLogout() {
+            document.getElementById('dashboard-screen').classList.add('hidden');
+            document.getElementById('auth-screen').classList.remove('hidden');
+        }
+
+        function openModal(modalId) { document.getElementById(modalId).classList.remove('hidden'); }
+        function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
 
         function submitDeposit() {
-            let amt = document.getElementById('depAmt').value;
-            if(!amt || amt < 100) { 
-                alert('Minimum deposit amount is ₹100'); 
-                return; 
-            }
-            alert('Deposit UTR Submitted! Pending verification.');
-            closeModal('depositModal');
+            let amt = parseFloat(document.getElementById('dep-amount').value);
+            let utr = document.getElementById('dep-utr').value;
+            if(!amt || amt < 100) { alert('न्यूनतम डिपॉजिट ₹100 है!'); return; }
+            if(!utr || utr.length < 12) { alert('कृपया सही 12-अंकों का UTR नंबर दर्ज करें!'); return; }
+            balance += amt;
+            updateBalanceDisplay();
+            alert('डिपॉजिट सफल! राशि आपके वॉलेट में जोड़ दी गई है।');
+            closeModal('deposit-modal');
         }
 
         function submitWithdraw() {
-            let amt = document.getElementById('withAmt').value;
-            if(!amt || amt <= 0) { 
-                alert('Please enter valid withdrawal amount'); 
-                return; 
+            let amt = parseFloat(document.getElementById('wit-amount').value);
+            if(!amt || amt <= 0) { alert('कृपया सही राशि दर्ज करें!'); return; }
+            if(amt > balance) { alert('पर्याप्त बैलेंस नहीं है!'); return; }
+            balance -= amt;
+            updateBalanceDisplay();
+            alert('निकासी अनुरोध सफल! पैसे आपके खाते में भेजे जा रहे हैं।');
+            closeModal('withdraw-modal');
+        }
+
+        function openGame(gameName) {
+            document.getElementById('dashboard-screen').classList.add('hidden');
+            if(gameName === 'aviator') document.getElementById('aviator-screen').classList.remove('hidden');
+            if(gameName === 'slots') document.getElementById('slots-screen').classList.remove('hidden');
+            if(gameName === 'wingo') document.getElementById('wingo-screen').classList.remove('hidden');
+        }
+
+        function closeGame() {
+            document.getElementById('aviator-screen').classList.add('hidden');
+            document.getElementById('slots-screen').classList.add('hidden');
+            document.getElementById('wingo-screen').classList.add('hidden');
+            document.getElementById('dashboard-screen').classList.remove('hidden');
+        }
+
+        // Aviator Logic
+        let aviatorInterval;
+        function startAviator() {
+            let bet = parseFloat(document.getElementById('aviator-bet').value);
+            if(bet > balance || bet <= 0) { alert('बैलेंस कम है या राशि अमान्य है!'); return; }
+            balance -= bet;
+            updateBalanceDisplay();
+            
+            let btn = document.getElementById('aviator-btn');
+            btn.innerText = 'कैश आउट करें';
+            btn.onclick = cashOutAviator;
+            
+            let mult = 1.00;
+            let display = document.getElementById('aviator-display');
+            let crashPoint = (Math.random() * 3 + 1.1).toFixed(2); // विमान कहाँ क्रैश होगा
+            
+            aviatorInterval = setInterval(() => {
+                mult += 0.05;
+                display.innerText = mult.toFixed(2) + 'x';
+                if(mult >= crashPoint) {
+                    clearInterval(aviatorInterval);
+                    display.innerText = 'क्रेस्ड! (Crashed)';
+                    btn.innerText = 'उड़ान भरें (Bet)';
+                    btn.onclick = startAviator;
+                }
+            }, 150);
+        }
+
+        function cashOutAviator() {
+            clearInterval(aviatorInterval);
+            let multText = document.getElementById('aviator-display').innerText.replace('x','');
+            let mult = parseFloat(multText) || 1;
+            let bet = parseFloat(document.getElementById('aviator-bet').value);
+            let win = bet * mult;
+            balance += win;
+            updateBalanceDisplay();
+            alert('बधाई हो! आपने जीत लिया: ₹' + win.toFixed(2));
+            
+            let btn = document.getElementById('aviator-btn');
+            btn.innerText = 'उड़ान भरें (Bet)';
+            btn.onclick = startAviator;
+        }
+
+        // Slots Logic
+        function playSlots() {
+            let bet = parseFloat(document.getElementById('slots-bet').value);
+            if(bet > balance || bet <= 0) { alert('पर्याप्त बैलेंस नहीं है!'); return; }
+            balance -= bet;
+            
+            let fruits = ['🍒', '🍋', '🍊', '🔔', '⭐'];
+            let f1 = fruits[Math.floor(Math.random()*fruits.length)];
+            let f2 = fruits[Math.floor(Math.random()*fruits.length)];
+            let f3 = fruits[Math.floor(Math.random()*fruits.length)];
+            
+            document.getElementById('slots-display').innerText = f1 + ' ' + f2 + ' ' + f3;
+            
+            if(f1 === f2 && f2 === f3) {
+                let win = bet * 5;
+                balance += win;
+                alert('बिंगो! आप जैकपॉट जीत गए: ₹' + win);
+            } else {
+                alert('आप हार गए, अगली बार कोशिश करें!');
             }
-            alert(`Withdrawal of ₹${amt} requested successfully! (3% fee deducted)`);
-            closeModal('withdrawModal');
+            updateBalanceDisplay();
+        }
+
+        // Win Go Logic
+        function playWinGo(choice) {
+            let bet = parseFloat(document.getElementById('wingo-bet').value);
+            if(bet > balance || bet <= 0) { alert('पर्याप्त बैलेंस नहीं है!'); return; }
+            balance -= bet;
+            
+            let colors = ['Red', 'Green', 'Red'];
+            let outcome = colors[Math.floor(Math.random()*colors.length)];
+            
+            let resDiv = document.getElementById('wingo-result');
+            if(choice === outcome) {
+                let win = bet * 2;
+                balance += win;
+                resDiv.style.color = '#4caf50';
+                resDiv.innerText = `परिणाम: ${outcome} - आप जीत गए ₹${win}!`;
+            } else {
+                resDiv.style.color = '#ff5722';
+                resDiv.innerText = `परिणाम: ${outcome} - आप हार गए!`;
+            }
+            updateBalanceDisplay();
         }
     </script>
 </body>
